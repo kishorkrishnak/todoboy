@@ -22,10 +22,10 @@ class _HomePageState extends State<HomePage> {
             });
           },
           decoration: InputDecoration(
-            border:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-            hintText: "Add a new task",
-          ),
+              border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black)),
+              hintText: "Add a new task",
+              hintStyle: TextStyle(fontSize: 15)),
         ),
         buttons: [
           DialogButton(
@@ -89,15 +89,31 @@ class _HomePageState extends State<HomePage> {
 
   Padding body() {
     return Padding(
-        padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(25.0),
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: ListView.builder(
-            itemCount: todoItems.length,
-            itemBuilder: (context, index) {
+          itemCount: todoItems.isEmpty ? 1 : todoItems.length,
+          itemBuilder: (context, index) {
+            if (todoItems.isEmpty) {
+              return Text(
+                "No Todos Yet",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              );
+            } else {
               return TodoItem(
-                  taskName: todoItems[index][0],
-                  taskCompleted: todoItems[index][1],
-                  onChanged: (value) => checkBoxChanged(value, index));
-            }));
+                taskName: todoItems[index][0],
+                taskCompleted: todoItems[index][1],
+                onChanged: (value) => checkBoxChanged(value, index),
+              );
+            }
+          },
+        ),
+      ),
+    );
   }
 
   AppBar appBar() {
